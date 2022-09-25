@@ -11,14 +11,43 @@
       </RouterLink>
       <div class="flex gap-3 flex-1 justify-end">
         <i
+          @click="toggleModal"
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"
         ></i>
         <i
           class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
         ></i>
       </div>
+
+      <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
+        <div class="text-black">
+          <h1 class="text-2xl mb-1 font-bold">关于:</h1>
+          <p class="mb-4">天气应用允许您跟踪选择的城市当前和未来的天气。</p>
+          <h2 class="text-2xl font-bold">如何使用:</h2>
+          <ol class="list-decimal list-inside mb-4">
+            <li>通过在搜索栏中输入名称来搜索您的城市。</li>
+            <li>在结果中选择一个城市，您将看到当地的天气。</li>
+            <li>
+              通过单击右上角的“+”图标来跟踪城市，这将保存城市以便稍后在主页上查看。
+            </li>
+          </ol>
+
+          <h2 class="text-2xl font-bold">移除城市:</h2>
+          <p>
+            如果您不希望继续跟踪某个城市，只需进入当前城市的主页。在页面底部可以看到删除城市按钮。
+          </p>
+        </div>
+      </BaseModal>
     </nav>
   </header>
 </template>
 
-<script setup></script>
+<script setup>
+  import { ref } from 'vue';
+  import BaseModal from './common/BaseModal.vue';
+
+  const modalActive = ref(null);
+  const toggleModal = () => {
+    modalActive.value = !modalActive.value;
+  };
+</script>

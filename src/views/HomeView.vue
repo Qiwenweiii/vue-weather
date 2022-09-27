@@ -54,7 +54,7 @@
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchQuery.value}.json?access_token=${mapboxAPIKey}&types=place&language=zh-Hans&country=CN`
           );
           searchResults.value = result.data.features;
-          console.log(searchResults.value);
+          // console.log(searchResults.value);
         } catch (error) {
           searchError.value = true;
         }
@@ -65,7 +65,6 @@
   };
 
   const previewCity = (result) => {
-    console.log(result);
     const state = result.context[0].text;
     const city = result.text;
     router.push({

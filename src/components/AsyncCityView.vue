@@ -143,5 +143,5 @@
   };
 
   const weatherData = await getWeatherData();
-  console.log(weatherData);
+  // console.log(weatherData);
 </script>

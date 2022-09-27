@@ -15,6 +15,8 @@
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"
         ></i>
         <i
+          v-if="route.query.preview"
+          @click="addCity"
           class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
         ></i>
       </div>
@@ -44,10 +46,39 @@
 
 <script setup>
   import { ref } from 'vue';
+  import { uid } from 'uid';
+  import { useRoute, useRouter } from 'vue-router';
   import BaseModal from './common/BaseModal.vue';
 
+  const router = useRouter();
+  const route = useRoute();
   const modalActive = ref(null);
   const toggleModal = () => {
     modalActive.value = !modalActive.value;
+  };
+
+  const savedCities = ref([]);
+  const addCity = () => {
+    // 读取本地存储的城市
+    if (localStorage.getItem('savedCities')) {
+      savedCities.value = JSON.parse(localStorage.getItem('savedCities'));
+    }
+
+    const locationObj = {
+      id: uid(),
+      state: route.params.state,
+      city: route.params.city,
+      coords: {
+        lat: route.query.lat,
+        lng: route.query.lng,
+      },
+    };
+
+    savedCities.value.unshift(locationObj);
+    localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
+
+    let newQuery = Object.assign({}, route.query);
+    delete newQuery.preview;
+    router.replace({ query: newQuery });
   };
 </script>

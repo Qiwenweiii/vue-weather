@@ -2,7 +2,7 @@
   <div class="flex flex-col flex-1 items-center">
     <!-- Banner -->
     <div
-      v-if="preview"
+      v-if="route.query.preview"
       class="text-white p-4 bg-weather-secondary w-full text-center"
     >
       你正在预览当前城市天气状况，点击 “+” 可将当前城市添加到城市列表。
@@ -117,7 +117,7 @@
   const weatherAPIKey = '7efa332cf48aeb9d2d391a51027f1a71';
 
   const { city } = route.params;
-  const { lat, lng, preview } = route.query;
+  const { lat, lng } = route.query;
 
   const getWeatherData = async () => {
     try {

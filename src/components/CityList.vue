@@ -49,6 +49,8 @@ const goToCityView = (city) => {
       city: city.city,
     },
     query: {
+      // 添加 id 到路由中，后续删除城市时会用到
+      id: city.id,
       lat: city.coords.lat,
       lng: city.coords.lng,
     },

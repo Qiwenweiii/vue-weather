@@ -45,40 +45,43 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import { uid } from 'uid';
-  import { useRoute, useRouter } from 'vue-router';
-  import BaseModal from './common/BaseModal.vue';
+import { ref } from 'vue';
+import { uid } from 'uid';
+import { useRoute, useRouter } from 'vue-router';
+import BaseModal from './common/BaseModal.vue';
 
-  const router = useRouter();
-  const route = useRoute();
-  const modalActive = ref(null);
-  const toggleModal = () => {
-    modalActive.value = !modalActive.value;
+const router = useRouter();
+const route = useRoute();
+const modalActive = ref(null);
+const toggleModal = () => {
+  modalActive.value = !modalActive.value;
+};
+
+const savedCities = ref([]);
+const addCity = () => {
+  // 读取本地存储的城市
+  if (localStorage.getItem('savedCities')) {
+    savedCities.value = JSON.parse(localStorage.getItem('savedCities'));
+  }
+
+  const locationObj = {
+    id: uid(),
+    state: route.params.state,
+    city: route.params.city,
+    coords: {
+      lat: route.query.lat,
+      lng: route.query.lng,
+    },
   };
 
-  const savedCities = ref([]);
-  const addCity = () => {
-    // 读取本地存储的城市
-    if (localStorage.getItem('savedCities')) {
-      savedCities.value = JSON.parse(localStorage.getItem('savedCities'));
-    }
+  savedCities.value.unshift(locationObj);
+  localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
 
-    const locationObj = {
-      id: uid(),
-      state: route.params.state,
-      city: route.params.city,
-      coords: {
-        lat: route.query.lat,
-        lng: route.query.lng,
-      },
-    };
+  let newQuery = Object.assign({}, route.query);
+  delete newQuery.preview;
 
-    savedCities.value.unshift(locationObj);
-    localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
-
-    let newQuery = Object.assign({}, route.query);
-    delete newQuery.preview;
-    router.replace({ query: newQuery });
-  };
+  // 添加 id 到路由中，后续删除城市时会用到
+  newQuery.id = locationObj.id;
+  router.replace({ query: newQuery });
+};
 </script>

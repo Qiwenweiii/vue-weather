@@ -96,52 +96,70 @@
         </div>
       </div>
     </div>
+
+    <!-- 删除 -->
+    <div
+      @click="removeCity"
+      class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
+    >
+      <i class="fa-solid fa-trash-can"></i>
+      <p>删除</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-  import axios from 'axios';
-  import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
 
-  const weekday = {
-    Monday: '周一',
-    Tuesday: '周二',
-    Wednesday: '周三',
-    Thursday: '周四',
-    Friday: '周五',
-    Saturday: '周六',
-    Sunday: '周日',
-  };
+const weekday = {
+  Monday: '周一',
+  Tuesday: '周二',
+  Wednesday: '周三',
+  Thursday: '周四',
+  Friday: '周五',
+  Saturday: '周六',
+  Sunday: '周日',
+};
 
-  const route = useRoute();
-  const weatherAPIKey = '7efa332cf48aeb9d2d391a51027f1a71';
+const route = useRoute();
+const weatherAPIKey = '7efa332cf48aeb9d2d391a51027f1a71';
 
-  const { city } = route.params;
-  const { lat, lng } = route.query;
+const { city } = route.params;
+const { lat, lng } = route.query;
 
-  const getWeatherData = async () => {
-    try {
-      const weatherData = await axios.get(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&exclude={part}&appid=${weatherAPIKey}&lang=zh_cn&units=metric`
-      );
+const getWeatherData = async () => {
+  try {
+    const weatherData = await axios.get(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&exclude={part}&appid=${weatherAPIKey}&lang=zh_cn&units=metric`
+    );
 
-      // 时间计算
-      const localOffset = new Date().getTimezoneOffset() * 60000;
-      const utc = weatherData.data.current.dt * 1000 + localOffset;
-      weatherData.data.currentTime =
-        utc + 1000 * weatherData.data.timezone_offset;
+    // 时间计算
+    const localOffset = new Date().getTimezoneOffset() * 60000;
+    const utc = weatherData.data.current.dt * 1000 + localOffset;
+    weatherData.data.currentTime =
+      utc + 1000 * weatherData.data.timezone_offset;
 
-      weatherData.data.hourly.forEach((hour) => {
-        const utc = hour.dt * 1000 + localOffset;
-        hour.currentTime = utc + 1000 * weatherData.data.timezone_offset;
-      });
+    weatherData.data.hourly.forEach((hour) => {
+      const utc = hour.dt * 1000 + localOffset;
+      hour.currentTime = utc + 1000 * weatherData.data.timezone_offset;
+    });
 
-      return weatherData.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    return weatherData.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  const weatherData = await getWeatherData();
-  // console.log(weatherData);
+const weatherData = await getWeatherData();
+
+const router = useRouter();
+const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem('savedCities'));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+  localStorage.setItem('savedCities', JSON.stringify(updatedCities));
+  router.push({
+    name: 'home',
+  });
+};
 </script>

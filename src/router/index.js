@@ -9,13 +9,24 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: {
+        title: '首页',
+      },
     },
     {
       path: '/weather/:state/:city',
       name: 'cityView',
       component: CityView,
+      meta: {
+        title: '天气',
+      },
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = `${to.params.city || to.meta.title} | 天气应用`;
+  next();
 });
 
 export default router;

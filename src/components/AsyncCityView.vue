@@ -99,6 +99,7 @@
 
     <!-- 删除 -->
     <div
+      v-if="!route.query.preview"
       @click="removeCity"
       class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
     >

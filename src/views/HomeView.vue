@@ -1,6 +1,6 @@
 <template>
   <main class="container text-white">
-    <div class="pt-4 mb-8">
+    <div class="pt-4 mb-8 relative">
       <input
         v-model="searchQuery"
         @input="getSearchResults"
@@ -10,7 +10,7 @@
       />
       <ul
         v-if="searchResults"
-        class="bg-weather-secondary text-white w-full shadow-md py-2 px-1 mt-4"
+        class="bg-weather-secondary text-white w-full shadow-md py-2 px-1 absolute mt-4"
       >
         <p v-if="searchError" class="px-2">好像出现了什么错误，请再试一次！</p>
         <p v-if="!searchError && searchResults.length === 0" class="px-2">

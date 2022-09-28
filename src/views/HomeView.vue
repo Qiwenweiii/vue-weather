@@ -28,56 +28,66 @@
         </template>
       </ul>
     </div>
+
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+        <template #fallback>
+          <p>Loading...</p>
+        </template>
+      </Suspense>
+    </div>
   </main>
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import CityList from '../components/CityList.vue';
 
-  const router = useRouter();
-  const mapboxAPIKey =
-    'pk.eyJ1IjoicWl3ZW53ZWlpaSIsImEiOiJjbDhiZDdxbTkwaWZvM25uMnE2bmpxZHN3In0.xx9eJNti_JqryOLnJfXrnw';
+const router = useRouter();
+const mapboxAPIKey =
+  'pk.eyJ1IjoicWl3ZW53ZWlpaSIsImEiOiJjbDhiZDdxbTkwaWZvM25uMnE2bmpxZHN3In0.xx9eJNti_JqryOLnJfXrnw';
 
-  const searchQuery = ref('');
-  const queryTimeout = ref(null);
-  const searchResults = ref(null);
-  const searchError = ref(null);
+const searchQuery = ref('');
+const queryTimeout = ref(null);
+const searchResults = ref(null);
+const searchError = ref(null);
 
-  const getSearchResults = () => {
-    clearTimeout(queryTimeout.value);
-    queryTimeout.value = setTimeout(async () => {
-      if (searchQuery.value !== '') {
-        try {
-          const result = await axios.get(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchQuery.value}.json?access_token=${mapboxAPIKey}&types=place&language=zh-Hans&country=CN`
-          );
-          searchResults.value = result.data.features;
-          // console.log(searchResults.value);
-        } catch (error) {
-          searchError.value = true;
-        }
-        return;
+const getSearchResults = () => {
+  clearTimeout(queryTimeout.value);
+  queryTimeout.value = setTimeout(async () => {
+    if (searchQuery.value !== '') {
+      try {
+        const result = await axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchQuery.value}.json?access_token=${mapboxAPIKey}&types=place&language=zh-Hans&country=CN`
+        );
+        searchResults.value = result.data.features;
+        // console.log(searchResults.value);
+      } catch (error) {
+        searchError.value = true;
       }
-      searchResults.value = null;
-    }, 300);
-  };
+      return;
+    }
+    searchResults.value = null;
+  }, 300);
+};
 
-  const previewCity = (result) => {
-    const state = result.context[0].text;
-    const city = result.text;
-    router.push({
-      name: 'cityView',
-      params: {
-        state: state,
-        city: city,
-      },
-      query: {
-        lat: result.geometry.coordinates[1],
-        lng: result.geometry.coordinates[0],
-        preview: true,
-      },
-    });
-  };
+const previewCity = (result) => {
+  const state = result.context[0].text;
+  const city = result.text;
+  router.push({
+    name: 'cityView',
+    params: {
+      state: state,
+      city: city,
+    },
+    query: {
+      lat: result.geometry.coordinates[1],
+      lng: result.geometry.coordinates[0],
+      preview: true,
+    },
+  });
+};
 </script>

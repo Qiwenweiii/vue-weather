@@ -145,6 +145,9 @@ const getWeatherData = async () => {
       hour.currentTime = utc + 1000 * weatherData.data.timezone_offset;
     });
 
+    // 延时，避免骨架屏到内容的渲染闪烁
+    await new Promise((res) => setTimeout(res, 1000));
+
     return weatherData.data;
   } catch (error) {
     console.log(error);

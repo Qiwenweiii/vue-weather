@@ -13,6 +13,7 @@ import { ref } from 'vue';
 import axios from 'axios';
 import CityCard from './CityCard.vue';
 import { useRouter } from 'vue-router';
+import CityCardSkeleton from './CityCardSkeleton.vue';
 
 const weatherAPIKey = '7efa332cf48aeb9d2d391a51027f1a71';
 
@@ -32,6 +33,9 @@ const getCities = async () => {
   });
 
   const weatherData = await Promise.all(requests);
+
+  // 延时，避免骨架屏到内容的渲染闪烁
+  await new Promise((res) => setTimeout(res, 1000));
 
   weatherData.forEach((value, index) => {
     savedCities.value[index].weather = value.data;

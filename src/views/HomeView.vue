@@ -44,7 +44,6 @@ const getSearchResult = () => {
     if (searchQuery.value) {
       try {
         const result = await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${searchQuery.value}&key=d63bf1dc11fb44e6b78dfc81d64165b0`);
-        console.log(result);
         searchResults.value = result.data.location;
       } catch (error) {
         searchError.value = true;
@@ -56,7 +55,6 @@ const getSearchResult = () => {
 };
 
 const previewCity = (searchResult) => {
-  console.log(searchResult);
   const state = searchResult.adm1;
   const city = searchResult.name;
 

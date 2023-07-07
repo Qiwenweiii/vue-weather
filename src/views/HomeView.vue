@@ -9,15 +9,16 @@
         class="py-2 px-1 w-full bg-transparent border-b outline-none focus:border-weather-secondary focus:shadow-[0px_1px_0_0_#004e71]" />
       <ul
         v-if="searchResults"
-        class="absolute top-[66px] bg-weather-secondary w-full shadow-md py-2 px-1">
+        class="absolute top-[66px] bg-weather-secondary w-full shadow-md">
         <p v-if="searchError">貌似出了点问题，请再试一次！</p>
         <p v-if="!searchError && searchResults.length === 0">没有找到匹配的城市，请重新输入！</p>
         <template v-else>
           <li
             v-for="searchResult in searchResults"
             :key="searchResult.id"
-            class="py-2 cursor-pointer">
-            {{ searchResult.text }}
+            @click="previewCity(searchResult)"
+            class="p-2 cursor-pointer hover:bg-weather-primary">
+            {{ searchResult.name }} <span>{{ searchResult.adm1 }}</span>
           </li>
         </template>
       </ul>
@@ -28,8 +29,10 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-const mapboxAPIKey = 'pk.eyJ1IjoicWl3ZW53ZWlpaSIsImEiOiJjbDhiZDdxbTkwaWZvM25uMnE2bmpxZHN3In0.xx9eJNti_JqryOLnJfXrnw';
+const router = useRouter();
+
 const searchQuery = ref('');
 const queryTimer = ref(null);
 const searchResults = ref(null);
@@ -40,8 +43,9 @@ const getSearchResult = () => {
   queryTimer.value = setTimeout(async () => {
     if (searchQuery.value) {
       try {
-        const result = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${searchQuery.value}.json?access_token=${mapboxAPIKey}&country=CN&language=zh_Hans&types=place`);
-        searchResults.value = result.data.features;
+        const result = await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${searchQuery.value}&key=d63bf1dc11fb44e6b78dfc81d64165b0`);
+        console.log(result);
+        searchResults.value = result.data.location;
       } catch (error) {
         searchError.value = true;
       }
@@ -49,5 +53,25 @@ const getSearchResult = () => {
     }
     searchResults.value = null;
   }, 300);
+};
+
+const previewCity = (searchResult) => {
+  console.log(searchResult);
+  const state = searchResult.adm1;
+  const city = searchResult.name;
+
+  router.push({
+    name: 'city',
+    params: {
+      state,
+      city,
+    },
+    query: {
+      lat: searchResult.lat,
+      lon: searchResult.lon,
+      location: searchResult.id,
+      preview: true,
+    },
+  });
 };
 </script>

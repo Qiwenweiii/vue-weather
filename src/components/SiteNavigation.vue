@@ -9,11 +9,18 @@
       </RouterLink>
 
       <div class="flex gap-3 flex-1 justify-end text-xl">
-        <i class="fa-solid fa-circle-info cursor-pointer hover:text-weather-secondary duration-300" @click="toggleModal"></i>
-        <i class="fa-solid fa-plus cursor-pointer hover:text-weather-secondary duration-300"></i>
+        <i
+          class="fa-solid fa-circle-info cursor-pointer hover:text-weather-secondary duration-300"
+          @click="toggleModal"></i>
+        <i
+          class="fa-solid fa-plus cursor-pointer hover:text-weather-secondary duration-300"
+          @click="addCity"
+          v-if="route.query.preview"></i>
       </div>
 
-      <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
+      <BaseModal
+        :modalActive="modalActive"
+        @close-modal="toggleModal">
         <div class="text-black">
           <h1 class="text-2xl mb-1 font-bold">关于:</h1>
           <p class="mb-4">天气应用允许您跟踪选择的城市当前和未来的天气。</p>
@@ -33,14 +40,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import BaseModal from './BaseModal.vue'
+import { ref } from 'vue';
+import { uid } from 'uid';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import BaseModal from './BaseModal.vue';
 
-const modalActive = ref(null)
+const route = useRoute();
+const router = useRouter();
+
+const modalActive = ref(null);
 const toggleModal = () => {
-  modalActive.value = !modalActive.value
-}
+  modalActive.value = !modalActive.value;
+};
+
+const savedCities = ref([]);
+const addCity = () => {
+  if (localStorage.getItem('savedCities')) {
+    savedCities.value = JSON.parse(localStorage.getItem('savedCities'));
+  }
+
+  const locationObj = {
+    id: uid(),
+    state: route.params.state,
+    city: route.params.city,
+    coords: {
+      lat: route.query.lat,
+      lng: route.query.lng,
+      location: route.query.location,
+    },
+  };
+
+  savedCities.value.push(locationObj);
+  localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
+
+  let query = Object.assign({}, route.query);
+  delete query.preview;
+  router.replace({ query });
+};
 </script>
 
 <style lang="scss" scoped></style>

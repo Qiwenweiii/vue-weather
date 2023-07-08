@@ -66,7 +66,7 @@ const previewCity = (searchResult) => {
     },
     query: {
       lat: searchResult.lat,
-      lon: searchResult.lon,
+      lng: searchResult.lon,
       location: searchResult.id,
       preview: true,
     },

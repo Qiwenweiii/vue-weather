@@ -28,7 +28,7 @@
           <ol class="list-decimal list-inside mb-4">
             <li>通过在搜索栏中输入名称来搜索您的城市。</li>
             <li>在结果中选择一个城市，您将看到当地的天气。</li>
-            <li>通过单击右上角的“+”图标来跟踪城市，这将保存城市以便稍后在主页上查看。</li>
+            <li>通过单击右上角的“+”图标来跟踪城市，这将保存城市以便稍后在主页查看。</li>
           </ol>
 
           <h2 class="text-2xl font-bold">移除城市:</h2>
@@ -63,6 +63,7 @@ const addCity = () => {
     id: uid(),
     state: route.params.state,
     city: route.params.city,
+    area: route.params.area,
     coords: {
       lat: route.query.lat,
       lng: route.query.lng,

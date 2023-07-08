@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/weather/:state/:city',
+      path: '/weather/:state/:city/:area',
       name: 'city',
       component: () => import('../views/CityView.vue'),
     },

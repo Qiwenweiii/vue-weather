@@ -63,13 +63,15 @@ const getSearchResult = () => {
 
 const previewCity = (searchResult) => {
   const state = searchResult.adm1;
-  const city = searchResult.name;
+  const city = searchResult.adm2;
+  const area = searchResult.name;
 
   router.push({
     name: 'city',
     params: {
       state,
       city,
+      area,
     },
     query: {
       lat: (+searchResult.lat).toFixed(2),

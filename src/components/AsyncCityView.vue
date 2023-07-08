@@ -9,7 +9,7 @@
 
     <!-- Weather Overview -->
     <div class="flex flex-col items-center text-white py-12">
-      <h1 class="text-4xl mb-2">{{ route.params.city }}</h1>
+      <h1 class="text-4xl mb-2">{{ route.params.area }}</h1>
       <p class="text-8xl mb-8">{{ nowWeatherData.temp }}&deg;</p>
       <i :class="`qi-${nowWeatherData.icon}-fill text-6xl mb-4`"></i>
       <p class="capitalize">{{ nowWeatherData.text }}</p>

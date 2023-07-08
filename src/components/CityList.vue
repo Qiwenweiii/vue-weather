@@ -1,13 +1,14 @@
 <template>
-  <div
+  <LocalCityCard />
+  <template
     v-for="city in savedCities"
     :key="city.id">
     <CityCard
       :city="city"
       @click="goToCityView(city)" />
-  </div>
+  </template>
 
-  <p v-if="savedCities.length === 0">没有已跟踪的城市，请输入你想要查询的城市名！</p>
+  <!-- <p v-if="savedCities.length === 0">没有已跟踪的城市，请输入你想要查询的城市名！</p> -->
 </template>
 
 <script setup>
@@ -15,6 +16,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import CityCard from './CityCard.vue';
+import LocalCityCard from './LocalCityCard.vue';
 
 const router = useRouter();
 

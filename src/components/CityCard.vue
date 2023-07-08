@@ -37,9 +37,11 @@ const goToCityView = (city) => {
       area: city.area,
     },
     query: {
+      id: city.id,
       lat: city.coords.lat,
       lng: city.coords.lng,
       location: city.coords.location,
+      local: city.local,
     },
   });
 };

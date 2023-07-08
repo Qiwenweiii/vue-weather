@@ -55,16 +55,25 @@
         </div>
       </div>
     </div>
+
+    <div
+      class="flex items-center gap-2 py-12 text-white cursor-pointer hover:text-red-500 duration-150"
+      v-if="!route.query.local"
+      @click="removeCity">
+      <i class="fas fa-trash"></i>
+      <p>删除</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
 const route = useRoute();
+const router = useRouter();
 
 const getNowWeather = async () => {
   try {
@@ -98,6 +107,15 @@ const getDaysWeather = async () => {
 };
 
 const daysWeatherData = await getDaysWeather();
+
+const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem('savedCities'));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+
+  localStorage.setItem('savedCities', JSON.stringify(updatedCities));
+
+  router.push({ name: 'home' });
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -3,9 +3,7 @@
   <template
     v-for="city in savedCities"
     :key="city.id">
-    <CityCard
-      :city="city"
-      @click="goToCityView(city)" />
+    <CityCard :city="city" />
   </template>
 
   <!-- <p v-if="savedCities.length === 0">没有已跟踪的城市，请输入你想要查询的城市名！</p> -->
@@ -39,22 +37,6 @@ const getCities = async () => {
   });
 };
 await getCities();
-
-const goToCityView = (city) => {
-  router.push({
-    name: 'city',
-    params: {
-      state: city.state,
-      city: city.city,
-      area: city.area,
-    },
-    query: {
-      lat: city.coords.lat,
-      lng: city.coords.lng,
-      location: city.coords.location,
-    },
-  });
-};
 </script>
 
 <style lang="scss" scoped></style>

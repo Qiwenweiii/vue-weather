@@ -23,6 +23,12 @@
         </template>
       </ul>
     </div>
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+        <template #fallback> loading... </template>
+      </Suspense>
+    </div>
   </main>
 </template>
 
@@ -30,6 +36,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import CityList from '../components/CityList.vue';
 
 const router = useRouter();
 
@@ -65,8 +72,8 @@ const previewCity = (searchResult) => {
       city,
     },
     query: {
-      lat: searchResult.lat,
-      lng: searchResult.lon,
+      lat: (+searchResult.lat).toFixed(2),
+      lng: (+searchResult.lon).toFixed(2),
       location: searchResult.id,
       preview: true,
     },

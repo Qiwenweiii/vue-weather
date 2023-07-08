@@ -8,53 +8,17 @@
     </div>
 
     <!-- Weather Overview -->
-    <div class="flex flex-col items-center text-white py-12">
-      <h1 class="text-4xl mb-2">{{ route.params.area }}</h1>
-      <p class="text-8xl mb-8">{{ nowWeatherData.temp }}&deg;</p>
-      <i :class="`qi-${nowWeatherData.icon}-fill text-6xl mb-4`"></i>
-      <p class="capitalize">{{ nowWeatherData.text }}</p>
-      <div class="text-center">体感温度：{{ nowWeatherData.feelsLike }}&deg;</div>
-    </div>
+    <NowWeather />
 
     <hr class="border-white border-opacity-10 border w-full" />
 
     <!-- hourly weather -->
-    <div class="w-full max-w-screen-md py-12">
-      <div class="mx-8 text-white">
-        <h2 class="mb-4 text-sm opacity-30"><i class="fa fa-clock pr-1"></i>每小时天气预报</h2>
-        <div class="flex gap-10 overflow-x-scroll">
-          <div
-            v-for="hourData in hoursWeatherData"
-            :key="hourData.fxTime"
-            class="flex flex-col gap-2 items-center">
-            <p class="whitespace-nowrap text-md">{{ new Date(hourData.fxTime).getHours() }}时</p>
-            <i :class="`qi-${hourData.icon}-fill text-xl`"></i>
-            <p class="whitespace-nowrap text-md">{{ hourData.temp }}&deg;</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <HourlyWeather />
 
     <hr class="border-white border-opacity-10 border w-full" />
 
-    <!-- weekly weather -->
-    <div class="w-full max-w-screen-md py-12">
-      <div class="mx-8 text-white divide-y divide-gray-200/10">
-        <h2 class="mb-4 text-sm opacity-30"><i class="fa fa-calendar-alt pr-1"></i>每周天气预报</h2>
-        <div
-          v-for="dayData in daysWeatherData"
-          :key="dayData.fxDate"
-          class="flex items-center justify-between py-2">
-          <p>{{ week[new Date(dayData.fxDate).getDay()] }}</p>
-          <i :class="`qi-${dayData.iconDay}-fill text-xl`"></i>
-          <div class="flex gap-2">
-            <p>最低温：{{ dayData.tempMin }}</p>
-            ---
-            <p>最高温：{{ dayData.tempMax }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- week weather -->
+    <DailyWeather />
 
     <div
       class="flex items-center gap-2 py-12 text-white cursor-pointer hover:text-red-500 duration-150"
@@ -68,45 +32,12 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { useWeather } from '../hooks/useWeather';
-
-const week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+import NowWeather from './asyncCityView/NowWeather.vue';
+import HourlyWeather from './asyncCityView/HourlyWeather.vue';
+import DailyWeather from './asyncCityView/DailyWeather.vue';
 
 const route = useRoute();
 const router = useRouter();
-
-const getNowWeather = async () => {
-  try {
-    const weatherData = await useWeather(route.query.location, 'now');
-    return weatherData.now;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const nowWeatherData = await getNowWeather();
-
-const getHoursWeather = async () => {
-  try {
-    const weatherData = await useWeather(route.query.location, '24h');
-    return weatherData.hourly;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const hoursWeatherData = await getHoursWeather();
-
-const getDaysWeather = async () => {
-  try {
-    const weatherData = await useWeather(route.query.location, '7d');
-    return weatherData.daily;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const daysWeatherData = await getDaysWeather();
 
 const removeCity = () => {
   const cities = JSON.parse(localStorage.getItem('savedCities'));

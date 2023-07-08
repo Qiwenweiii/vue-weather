@@ -11,12 +11,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
 import CityCard from './CityCard.vue';
 import LocalCityCard from './LocalCityCard.vue';
-
-const router = useRouter();
 
 const savedCities = ref([]);
 const getCities = async () => {

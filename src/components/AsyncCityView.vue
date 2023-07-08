@@ -67,8 +67,8 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
+import { useWeather } from '../hooks/useWeather';
 
 const week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
@@ -77,8 +77,8 @@ const router = useRouter();
 
 const getNowWeather = async () => {
   try {
-    const weatherData = await axios.get(`https://devapi.qweather.com/v7/weather/now?key=d63bf1dc11fb44e6b78dfc81d64165b0&location=${route.query.location}`);
-    return weatherData.data.now;
+    const weatherData = await useWeather(route.query.location, 'now');
+    return weatherData.now;
   } catch (error) {
     console.log(error);
   }
@@ -88,8 +88,8 @@ const nowWeatherData = await getNowWeather();
 
 const getHoursWeather = async () => {
   try {
-    const weatherData = await axios.get(`https://devapi.qweather.com/v7/weather/24h?key=d63bf1dc11fb44e6b78dfc81d64165b0&location=${route.query.location}`);
-    return weatherData.data.hourly;
+    const weatherData = await useWeather(route.query.location, '24h');
+    return weatherData.hourly;
   } catch (error) {
     console.log(error);
   }
@@ -99,8 +99,8 @@ const hoursWeatherData = await getHoursWeather();
 
 const getDaysWeather = async () => {
   try {
-    const weatherData = await axios.get(`https://devapi.qweather.com/v7/weather/7d?key=d63bf1dc11fb44e6b78dfc81d64165b0&location=${route.query.location}`);
-    return weatherData.data.daily;
+    const weatherData = await useWeather(route.query.location, '7d');
+    return weatherData.daily;
   } catch (error) {
     console.log(error);
   }

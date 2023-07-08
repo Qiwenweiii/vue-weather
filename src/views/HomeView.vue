@@ -34,9 +34,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
 import CityList from '../components/CityList.vue';
+import { useCity } from '../hooks/useCity';
 
 const router = useRouter();
 
@@ -50,8 +50,8 @@ const getSearchResult = () => {
   queryTimer.value = setTimeout(async () => {
     if (searchQuery.value) {
       try {
-        const result = await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${searchQuery.value}&key=d63bf1dc11fb44e6b78dfc81d64165b0`);
-        searchResults.value = result.data.location;
+        const result = await useCity(searchQuery.value);
+        searchResults.value = result.location;
       } catch (error) {
         searchError.value = true;
       }

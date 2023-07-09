@@ -22,7 +22,7 @@
 
     <div
       class="flex items-center gap-2 py-12 text-white cursor-pointer hover:text-red-500 duration-150"
-      v-if="!route.query.local"
+      v-if="!route.query.local && !route.query.preview"
       @click="removeCity">
       <i class="fas fa-trash"></i>
       <p>删除</p>

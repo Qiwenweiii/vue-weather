@@ -66,16 +66,12 @@ const getSearchResult = () => {
 };
 
 const previewCity = (searchResult) => {
-  const state = searchResult.adm1;
-  const city = searchResult.adm2;
-  const area = searchResult.name;
-
-  router.push({
+  const routePath = {
     name: 'city',
     params: {
-      state,
-      city,
-      area,
+      state: searchResult.adm1,
+      city: searchResult.adm2,
+      area: searchResult.name,
     },
     query: {
       lat: (+searchResult.lat).toFixed(2),
@@ -83,6 +79,17 @@ const previewCity = (searchResult) => {
       location: searchResult.id,
       preview: true,
     },
+  };
+
+  const savedCities = JSON.parse(localStorage.getItem('savedCities'));
+
+  savedCities.forEach((city) => {
+    if (city.coords.location === searchResult.id) {
+      routePath.query.id = city.id;
+      delete routePath.query.preview;
+    }
   });
+
+  router.push(routePath);
 };
 </script>

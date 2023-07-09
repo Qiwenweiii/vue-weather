@@ -51,7 +51,11 @@ const getSearchResult = () => {
     if (searchQuery.value) {
       try {
         const result = await useCity(searchQuery.value);
-        searchResults.value = result.location;
+        if (result.location) {
+          searchResults.value = result.location;
+        } else {
+          searchResults.value = [];
+        }
       } catch (error) {
         searchError.value = true;
       }

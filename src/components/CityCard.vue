@@ -8,7 +8,7 @@
           {{ city.area }}
         </h2>
         <i
-          v-if="local"
+          v-if="city.local"
           class="fa-solid fa-location-arrow text-sm self-start"></i>
       </div>
       <h3>{{ city.state }}{{ city.city === city.area ? '' : ' · ' + city.city + '市' }}</h3>
@@ -30,10 +30,6 @@ defineProps({
   city: {
     type: Object,
     default: () => {},
-  },
-  local: {
-    type: Boolean,
-    default: false,
   },
 });
 

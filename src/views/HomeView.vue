@@ -81,14 +81,16 @@ const previewCity = (searchResult) => {
     },
   };
 
-  const savedCities = JSON.parse(localStorage.getItem('savedCities'));
+  if (localStorage.getItem('savedCities')) {
+    const savedCities = JSON.parse(localStorage.getItem('savedCities'));
 
-  savedCities.forEach((city) => {
-    if (city.coords.location === searchResult.id) {
-      routePath.query.id = city.id;
-      delete routePath.query.preview;
-    }
-  });
+    savedCities.forEach((city) => {
+      if (city.coords.location === searchResult.id) {
+        routePath.query.id = city.id;
+        delete routePath.query.preview;
+      }
+    });
+  }
 
   router.push(routePath);
 };

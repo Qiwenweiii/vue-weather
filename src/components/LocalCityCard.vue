@@ -2,6 +2,7 @@
   <CityCard
     :city="localCity"
     v-if="localCity" />
+  <CityCardSkeleton v-else />
 
   <p v-if="localErr">您的定位权限未开启，无法跟踪本地天气，请打开定位或者查询您想要查看的城市名！</p>
 </template>
@@ -11,6 +12,7 @@ import { ref } from 'vue';
 import CityCard from './CityCard.vue';
 import { useCity } from '../hooks/useCity';
 import { useWeather } from '../hooks/useWeather';
+import CityCardSkeleton from './CityCardSkeleton.vue';
 
 const localCity = ref(null);
 const localErr = ref(false);

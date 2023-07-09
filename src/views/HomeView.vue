@@ -26,7 +26,9 @@
     <div class="flex flex-col gap-4">
       <Suspense>
         <CityList />
-        <template #fallback> loading... </template>
+        <template #fallback>
+          <CityCardSkeleton />
+        </template>
       </Suspense>
     </div>
   </main>
@@ -36,6 +38,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CityList from '../components/CityList.vue';
+import CityCardSkeleton from '../components/CityCardSkeleton.vue';
 import { useCity } from '../hooks/useCity';
 
 const router = useRouter();

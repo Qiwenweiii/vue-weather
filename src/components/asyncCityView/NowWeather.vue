@@ -17,6 +17,10 @@ const route = useRoute();
 const getNowWeather = async () => {
   try {
     const weatherData = await useWeather(route.query.location, 'now');
+
+    // 添加一个延时，否则加载动画太短，画面闪烁太强
+    await new Promise((res) => setTimeout(res, 1000));
+
     return weatherData.now;
   } catch (error) {
     console.log(error);

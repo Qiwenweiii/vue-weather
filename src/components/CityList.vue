@@ -29,6 +29,9 @@ const getCities = async () => {
 
   const weatherData = await Promise.all(requests);
 
+  // 添加一个延时，否则加载动画太短，画面闪烁太强
+  await new Promise((res) => setTimeout(res, 1000));
+
   weatherData.forEach((value, index) => {
     savedCities.value[index].weather = value.data.now;
   });

@@ -1,7 +1,8 @@
 <template>
   <CityCard
     :city="localCity"
-    v-if="localCity" />
+    v-if="localCity"
+    :local="true" />
 
   <p v-if="localErr">您的定位权限未开启，无法跟踪本地天气，请打开定位或者查询您想要查看的城市名！</p>
 </template>

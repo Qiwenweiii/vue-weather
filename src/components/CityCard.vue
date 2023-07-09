@@ -3,7 +3,14 @@
     class="flex justify-between py-6 px-3 bg-weather-secondary rounded-md shadow-md cursor-pointer"
     @click="goToCityView(city)">
     <div class="flex flex-col gap-2">
-      <h2 class="text-3xl">{{ city.area }}</h2>
+      <div class="flex gap-2">
+        <h2 class="text-3xl">
+          {{ city.area }}
+        </h2>
+        <i
+          v-if="local"
+          class="fa-solid fa-location-arrow text-sm self-start"></i>
+      </div>
       <h3>{{ city.state }}{{ city.city === city.area ? '' : ' · ' + city.city + '市' }}</h3>
     </div>
     <div class="flex flex-col gap-2">
@@ -23,6 +30,10 @@ defineProps({
   city: {
     type: Object,
     default: () => {},
+  },
+  local: {
+    type: Boolean,
+    default: false,
   },
 });
 
